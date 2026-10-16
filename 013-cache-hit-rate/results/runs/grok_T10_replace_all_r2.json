@@ -1,0 +1,46 @@
+{
+ "task": "T10_replace_all",
+ "rep": 2,
+ "test_pass": true,
+ "test_js_untouched": true,
+ "text": "I'll look at the failing test and `broken.js`, then fix only that file and rerun the test.The test expects `http://api.example` everywhere `broken.js` still has `http://legacy.example`. I'll replace all three occurrences.Replaced every `http://legacy.example` in `broken.js` with `http://api.example`.",
+ "usage": {
+  "input_tokens": 14357,
+  "cache_read_input_tokens": 50176,
+  "cache_creation_input_tokens": 0,
+  "output_tokens": 449,
+  "reasoning_tokens": 196,
+  "total_tokens": 64982
+ },
+ "cost": 0.01920864,
+ "turns": 4,
+ "latency": 17.32,
+ "raw": {
+  "text": "I'll look at the failing test and `broken.js`, then fix only that file and rerun the test.The test expects `http://api.example` everywhere `broken.js` still has `http://legacy.example`. I'll replace all three occurrences.Replaced every `http://legacy.example` in `broken.js` with `http://api.example`.",
+  "stopReason": "end_turn",
+  "sessionId": "01a13ab7-4559-79c3-830f-3543966369be",
+  "requestId": "c945a867-017d-45e5-b0c2-0a6a4f7050c4",
+  "cwd": "/tmp/g013_T10_replace_all_mcnqqmc3",
+  "usage": {
+   "input_tokens": 14357,
+   "cache_read_input_tokens": 50176,
+   "cache_creation_input_tokens": 0,
+   "output_tokens": 449,
+   "reasoning_tokens": 196,
+   "total_tokens": 64982
+  },
+  "num_turns": 4,
+  "total_cost_usd": 0.01920864,
+  "total_cost_usd_ticks": 192086400,
+  "modelUsage": {
+   "grok-4.7-build": {
+    "inputTokens": 14357,
+    "outputTokens": 449,
+    "cacheReadInputTokens": 50176,
+    "cacheCreationInputTokens": 0,
+    "modelCalls": 4,
+    "costUSD": 0.01920864
+   }
+  }
+ }
+}

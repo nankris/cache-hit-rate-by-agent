@@ -1,0 +1,29 @@
+{
+ "grok_runs": 33,
+ "grok_pass": 33,
+ "grok_test_js_untouched": 33,
+ "grok_overall_hit": 0.7974,
+ "grok_hit_by_rep": {
+  "1": 0.807,
+  "2": 0.786,
+  "3": 0.8015
+ },
+ "grok_median_task_hit": 0.7782,
+ "grok_min_task_hit": 0.6818,
+ "grok_max_task_hit": 0.8774,
+ "grok_mean_input_per_run": 81295,
+ "grok_mean_cost_usd": 0.02397,
+ "grok_total_cost_usd": 0.7909,
+ "grok_cost_if_no_cache_usd": 1.8819,
+ "grok_mean_model_calls": 4.64,
+ "codex_runs": 11,
+ "codex_pass": 11,
+ "codex_overall_hit": 0.9151,
+ "codex_median_task_hit": 0.9285,
+ "codex_mean_input_per_run": 49184,
+ "models": [
+  "grok-4.7-build"
+ ],
+ "first": "2026-10-14 19:29:22",
+ "last": "2026-10-14 20:25:25"
+}

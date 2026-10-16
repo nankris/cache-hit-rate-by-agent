@@ -1,0 +1,12 @@
+task,input_tokens,cached_input_tokens,output_tokens,reasoning_output_tokens,turns,latency_s,test_pass,test_js_untouched,error
+T01_happy,44004,40960,231,0,1,32.4,True,True,
+T02_duplicate,44238,41088,256,0,1,12.2,True,True,
+T03_whitespace,43495,40704,222,0,1,24.0,True,True,
+T04_tabs,43327,40704,222,0,1,24.5,True,True,
+T05_stale,58049,55040,256,0,1,43.9,True,True,
+T06_neardup,43716,36864,238,0,1,28.0,True,True,
+T07_multihunk,44362,41088,274,0,1,43.1,True,True,
+T08_insert,58967,50944,250,0,1,28.2,True,True,
+T09_delete,57777,52864,222,0,1,57.3,True,True,
+T10_replace_all,44253,41088,293,0,1,52.9,True,True,
+T11_shortctx,58834,53760,256,0,1,50.1,True,True,
