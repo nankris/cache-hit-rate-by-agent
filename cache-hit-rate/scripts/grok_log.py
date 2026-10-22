@@ -12,7 +12,7 @@ FIELDS = ["ts_ist", "experiment", "label", "rep", "model", "input_tokens", "cach
           "cache_creation_input_tokens", "total_input_tokens", "cached_share", "output_tokens", "reasoning_tokens",
           "total_tokens", "cost_usd", "cost_usd_ticks", "latency_s", "num_turns", "exit_code",
           "stop_reason", "limit_hit", "error"]
-STOP_FILE = os.environ.get("GROK_STOP_FILE", "/workspace/work/tig/_shared/QUOTA_STOP")
+STOP_FILE = os.environ.get("GROK_STOP_FILE", "/tmp/GROK_QUOTA_STOP")
 LIMIT_RE = re.compile(r"(rate.?limit|usage.?limit|quota|too many requests|\b429\b|limit reached|exceeded)", re.I)
 
 class QuotaHit(Exception):

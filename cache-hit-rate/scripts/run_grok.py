@@ -2,7 +2,7 @@
 import os, sys, shutil, tempfile, hashlib, subprocess, json, concurrent.futures as cf
 sys.path.insert(0, os.path.dirname(__file__))
 from grok_log import run_grok, QuotaHit
-FIX = "/workspace/work/gbarchive/edit-tool-experiment/fixtures"
+FIX = os.environ.get("FIXTURES_DIR", os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "fixtures"))
 D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CSV = os.path.join(D, "results", "grok_calls.csv")
 REP = int(os.environ.get("REP", 1))
@@ -10,9 +10,9 @@ PROMPT = ("In this directory, `node test.js` currently fails. Fix broken.js so t
           "Do not edit test.js. Run the test to confirm, then reply with one line saying what you changed.")
 sha = lambda p: hashlib.sha256(open(p, "rb").read()).hexdigest()
 def job(t):
-    wd = tempfile.mkdtemp(prefix=f"g013_{t}_"); shutil.copytree(os.path.join(FIX, t), wd, dirs_exist_ok=True)
+    wd = tempfile.mkdtemp(prefix=f"grok_{t}_"); shutil.copytree(os.path.join(FIX, t), wd, dirs_exist_ok=True)
     h0 = sha(os.path.join(wd, "test.js"))
-    r = run_grok(PROMPT, t, CSV, "013-grok", REP, cwd=wd, extra=["--always-approve", "--disable-web-search"])
+    r = run_grok(PROMPT, t, CSV, "cache-hit-rate-grok", REP, cwd=wd, extra=["--always-approve", "--disable-web-search"])
     p = subprocess.run(["node", "test.js"], cwd=wd, capture_output=True, text=True)
     res = dict(task=t, rep=REP, test_pass=p.returncode == 0, test_js_untouched=sha(os.path.join(wd, "test.js")) == h0,
                text=r["text"], usage=r["raw"].get("usage"), cost=r["cost_usd"], turns=r["num_turns"], latency=r["latency_s"])

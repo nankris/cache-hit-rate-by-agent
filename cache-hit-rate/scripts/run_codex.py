@@ -1,6 +1,6 @@
 # Same 11 fixtures, once, through `codex exec --json`. Codex input_tokens INCLUDES cached_input_tokens.
 import os, sys, shutil, tempfile, hashlib, subprocess, json, csv, time, concurrent.futures as cf, re
-FIX = "/workspace/work/gbarchive/edit-tool-experiment/fixtures"
+FIX = os.environ.get("FIXTURES_DIR", os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "fixtures"))
 D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CSV = os.path.join(D, "results", "codex_calls.csv")
 PROMPT = ("In this directory, `node test.js` currently fails. Fix broken.js so that `node test.js` passes. "
@@ -8,7 +8,7 @@ PROMPT = ("In this directory, `node test.js` currently fails. Fix broken.js so t
 sha = lambda p: hashlib.sha256(open(p, "rb").read()).hexdigest()
 F = ["task", "input_tokens", "cached_input_tokens", "output_tokens", "reasoning_output_tokens", "turns", "latency_s", "test_pass", "test_js_untouched", "error"]
 def job(t):
-    wd = tempfile.mkdtemp(prefix=f"c013_{t}_"); shutil.copytree(os.path.join(FIX, t), wd, dirs_exist_ok=True)
+    wd = tempfile.mkdtemp(prefix=f"codex_{t}_"); shutil.copytree(os.path.join(FIX, t), wd, dirs_exist_ok=True)
     subprocess.run(["git", "init", "-q", "."], cwd=wd)
     h0 = sha(os.path.join(wd, "test.js")); t0 = time.time()
     p = subprocess.run(["codex", "exec", "--json", "--skip-git-repo-check", "--dangerously-bypass-approvals-and-sandbox", PROMPT],

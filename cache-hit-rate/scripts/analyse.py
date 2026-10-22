@@ -15,7 +15,7 @@ t = gt.join(c[["total_in", "cached_input_tokens", "codex_hit", "test_pass"]], rs
 t.round(4).to_csv(f"{D}/results/summary_by_task.csv")
 # Grok first rep vs second rep
 byrep = g.groupby("rep").apply(lambda x: x.cache_read_input_tokens.sum() / x.total_in.sum())
-# token-weighted cost had there been zero caching (implied price 0.68 / 0.17 per M from #021)
+# token-weighted cost had there been zero caching (implied price 0.68 / 0.17 per M from my exact cost logger)
 nocache = ((g.total_in * 0.68 + g.output_tokens * 2.04) / 1e6).sum()
 s = dict(grok_runs=len(g), grok_pass=int(g.test_pass.sum()), grok_test_js_untouched=int(g.test_js_untouched.sum()),
          grok_overall_hit=round(g.cache_read_input_tokens.sum() / g.total_in.sum(), 4),

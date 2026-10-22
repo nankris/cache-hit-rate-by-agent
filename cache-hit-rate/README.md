@@ -1,11 +1,11 @@
-# #013 Cache hit rate: how much of each agent's input is a cache hit?
+# Cache hit rate: how much of each agent's input is a cache hit?
 
 **Question.** When a coding agent CLI fixes a small bug, what share of the input tokens it sends are served from the provider's prompt cache (cached ÷ total input)? How do Grok Build CLI and Codex CLI compare on the same tasks?
 
 **Answer, short.** On 11 small JavaScript bug-fix tasks, **Grok Build CLI averaged 79.7%** cache hits (33 runs, per-task range 68–88%). **Codex CLI averaged 91.5%** (11 runs, range 84–95%). Both passed every test, and neither touched `test.js`. Grok also sent more input per task (~81K vs ~49K tokens), so it paid for more uncached tokens on both counts.
 
 ## Setup
-- Tasks: `/workspace/work/gbarchive/edit-tool-experiment/fixtures/T01..T11`. Each has a `broken.js` and a `test.js` (`node test.js`). For every run the fixture is copied to a fresh temp dir.
+- Tasks: 11 small JavaScript bug-fix fixtures `T01..T11` from my earlier edit-tool experiment, expected in `fixtures/` (override with `FIXTURES_DIR`). Each has a `broken.js` and a `test.js` (`node test.js`). For every run the fixture is copied to a fresh temp dir.
 - Same prompt for both agents: *"In this directory, `node test.js` currently fails. Fix broken.js so that `node test.js` passes. Do not edit test.js. Run the test to confirm, then reply with one line saying what you changed."*
 - Pass check: after the agent exits, the harness runs `node test.js` itself and confirms `test.js` is byte-for-byte unchanged (sha256).
 - **Grok:** Grok Build CLI 1.0.52 (SuperGrok), reported model `grok-4.7-build`. Ran `grok --no-auto-update -p "<prompt>" --output-format json --always-approve --disable-web-search`. 3 runs per task (33 total): reps 1–2 ran 4 tasks in parallel (19:29–19:31 IST); rep 3 ran **one at a time, sequentially** (20:15–20:25 IST) to check whether parallelism inflated cache hits. It didn't (80.2%).
@@ -18,12 +18,11 @@
 Hit rate = cached ÷ total input, token-weighted.
 
 ```bash
-source /workspace/tools/setup.sh
-python scripts/run_013_grok.py            # REP=1 (default)
-REP=2 python scripts/run_013_grok.py
-REP=3 PAR=1 python scripts/run_013_grok.py   # sequential rep (resumable)
-python scripts/run_013_codex.py           # resumable; writes results/codex_calls.csv
-python scripts/analyse_013.py             # -> results/summary.json, results/summary_by_task.csv, cache_hit_rate.png
+python scripts/run_grok.py            # REP=1 (default)
+REP=2 python scripts/run_grok.py
+REP=3 PAR=1 python scripts/run_grok.py   # sequential rep (resumable)
+python scripts/run_codex.py           # resumable; writes results/codex_calls.csv
+python scripts/analyse.py             # -> results/summary.json, results/summary_by_task.csv, cache_hit_rate.png
 ```
 
 ## Results
@@ -53,7 +52,7 @@ python scripts/analyse_013.py             # -> results/summary.json, results/sum
 | mean wall time per run | 22.7 s | 36.1 s |
 | API-equivalent cost | 2.40¢/run, $0.79 total | not reported by `codex exec --json` |
 
-**What caching saved Grok:** at the implied prices from #021 ($0.68/M uncached, $0.17/M cached, $2.04/M output), these 33 runs would have cost $1.88 with no caching, against $0.79 actually charged. That's 58% less.
+**What caching saved Grok:** at the implied prices from my [exact cost logger](https://github.com/nankris/exact-cost-logger) ($0.68/M uncached, $0.17/M cached, $2.04/M output), these 33 runs would have cost $1.88 with no caching, against $0.79 actually charged. That's 58% less.
 
 Chart: `cache_hit_rate.png`.
 
@@ -64,4 +63,4 @@ Chart: `cache_hit_rate.png`.
 - "Model calls" for Grok is `num_turns` from its JSON. Codex's JSON reports one `turn.completed` per exec, so its internal call count isn't comparable and isn't shown.
 - Small toy tasks: these are tiny files, so the system prompt and tool schema dominate input. On a real repo, file content would be a bigger share.
 - Codex's trust prompts added the temp directories as trusted projects in `~/.codex/config.toml`. That's harmless, but it is a side effect.
-- The plan also listed Claude Code. It wasn't run here (Grok and Codex only).
+- Claude Code was not run here (Grok and Codex only).

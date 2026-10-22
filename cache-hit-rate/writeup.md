@@ -1,6 +1,6 @@
 # Which coding agent reuses its memory best? Grok vs Codex on the same 11 bugs
 
-*Draft for Tech in General: real numbers from one evening, 14 Oct 2026.*
+*Real numbers from one evening, 14 Oct 2026.*
 
 Every time a coding agent takes a step, it resends the whole conversation: system prompt, tool definitions, files it has read, and its own previous moves. Providers cache the repeated start of that prompt and bill it at a fraction of the price. So the share of input that's a cache hit is one of the biggest levers on what an agent costs.
 
@@ -8,7 +8,7 @@ Published numbers put Claude Code at about 92% and some open-source agents below
 
 ## The test
 
-I used 11 tiny JavaScript bugs from an earlier experiment: duplicate functions, tabs vs spaces, an insert-only fix, a multi-hunk fix, and so on. Each run got a fresh copy of the folder and the same instruction: *make `node test.js` pass without touching `test.js`*. Afterwards my harness ran the test itself and checked that `test.js` was unchanged.
+I used 11 tiny JavaScript bugs from an earlier edit-tool experiment: duplicate functions, tabs vs spaces, an insert-only fix, a multi-hunk fix, and so on. Each run got a fresh copy of the folder and the same instruction: *make `node test.js` pass without touching `test.js`*. Afterwards my harness ran the test itself and checked that `test.js` was unchanged.
 
 - **Grok Build CLI** (SuperGrok, `grok-4.7-build`): 3 runs per task, 33 in total (the third run one task at a time, to rule out parallel runs warming each other's cache)
 - **Codex CLI** (ChatGPT Plus): 1 run per task, 11 in total
@@ -45,4 +45,4 @@ The two CLIs count input differently. Grok's `input_tokens` **excludes** cached 
 - The bugs are tiny. On a real repo, file contents would make up more of the prompt and the numbers would shift.
 - Codex's JSON doesn't report a cost, so I can only compare tokens.
 
-*Scripts, raw JSON for every run and the CSVs are in the experiment repo.*
+*Scripts, raw JSON for every run and the CSVs are in this repo.*
